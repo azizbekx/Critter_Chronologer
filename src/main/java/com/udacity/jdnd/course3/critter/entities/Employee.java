@@ -6,28 +6,67 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table
 public class Employee {
+    //    @Id
+//    @GeneratedValue
+//    private Long id;
+//
+//    @Nationalized
+//    private String name;
+//
+//    @ElementCollection
+//    @JoinTable(name = "employee_days", joinColumns = @JoinColumn(name = "employee_id"))
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private Set<DayOfWeek> daysAvailable;
+//
+//    @ElementCollection
+//    @JoinTable(name = "employee_skills", joinColumns = @JoinColumn(name = "employee_id"))
+//    @Column(name = "skills", nullable = false)
+//    @Enumerated(EnumType.STRING)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private Set<EmployeeSkill> skills;
+//
+//    @ManyToMany(mappedBy = "employee")
+//    private List<Schedule> schedules;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Nationalized
+    @Column(length = 64)
     private String name;
 
     @ElementCollection
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private Set<DayOfWeek> daysAvailable;
-
-    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @JoinTable(name = "employee_skills", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "skill", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<EmployeeSkill> skills;
 
+    @ElementCollection
+    @JoinTable(name = "employee_days", joinColumns = @JoinColumn(name = "employee_id"))
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Set<DayOfWeek> daysAvailable;
+
+    @ManyToMany(mappedBy = "employee")
+    private List<Schedule> schedules;
+
+
     public Employee() {
     }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
 
     public Long getId() {
         return id;

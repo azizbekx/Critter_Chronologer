@@ -65,23 +65,20 @@ public class UserController {
 
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        userService.setAvailability(daysAvailable,employeeId);
+        userService.setAvailability(daysAvailable, employeeId);
     }
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-            List<Employee> employees = userService.getEmployeesForService(
-                    employeeDTO.getDate().getDayOfWeek(), employeeDTO.getSkills());
+        List<Employee> employees = userService.getEmployeesForService(
+                employeeDTO.getSkills(), employeeDTO.getDate().getDayOfWeek());
 
-            return employees.stream().map(this::setEmployeeDTO).collect(Collectors.toList());
-//        return employees.stream().map(employee -> {
-//            EmployeeDTO dto = new EmployeeDTO();
-//            BeanUtils.copyProperties(employee, dto);
-//            return dto;
-//        }).collect(Collectors.toList());
+        return employees.stream().map(this::setEmployeeDTO).collect(Collectors.toList());
+
     }
+
     /**
-    * Transfer CustomerDTO
+     * Transfer CustomerDTO
      */
     public CustomerDTO setCustomerDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
@@ -94,6 +91,7 @@ public class UserController {
         return customerDTO;
 
     }
+
     /**
      * Transfer CustomerDTO
      */

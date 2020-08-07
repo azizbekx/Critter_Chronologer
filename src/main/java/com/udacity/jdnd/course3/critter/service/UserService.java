@@ -70,7 +70,7 @@ public class UserService {
     /**
      * GET EMPLOYEE FOR SERVICE
      */
-    public List<Employee> getEmployeesForService(DayOfWeek dayOfWeek, Set<EmployeeSkill> skills) {
-        return employeeRepository.findAllByDaysAvailableAndSkillsContains(dayOfWeek,skills);
+    public List<Employee> getEmployeesForService(Set<EmployeeSkill> skills,DayOfWeek dayOfWeek) {
+        return employeeRepository.findAllBySkillsInAndDaysAvailableContains(skills, dayOfWeek);
     }
 }

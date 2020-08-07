@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 //@Inheritance(strategy = InheritanceType.JOINED)
-@Table
 public class Customer {
     @Id
     @GeneratedValue
@@ -16,6 +15,7 @@ public class Customer {
     @Nationalized
     private String name;
     private String phoneNumber;
+    @Column(length = 500)
     private String notes;
 
     @OneToMany

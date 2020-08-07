@@ -9,16 +9,20 @@ import java.util.List;
 
 @Entity
 //@Inheritance(strategy = InheritanceType.JOINED)
-@Table
+
 public class Pet {
     @Id
     @GeneratedValue
     private Long id;
 
     @Nationalized
+    @Column(length = 64)
     private String name;
+
     private Long ownerId;
+
     private LocalDate birthDate;
+    @Column(length = 500)
     private String notes;
 
     private PetType petType;
@@ -27,6 +31,9 @@ public class Pet {
 
     @ManyToMany
     private List<Schedule> schedules;
+
+    public Pet() {
+    }
 
     public Customer getCustomer() {
         return customer;
