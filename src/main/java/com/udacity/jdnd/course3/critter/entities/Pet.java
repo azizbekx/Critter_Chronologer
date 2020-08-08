@@ -26,10 +26,19 @@ public class Pet {
     private String notes;
 
     private PetType petType;
+
     @ManyToOne
     private Customer customer;
 
-    @ManyToMany
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
+    @ManyToMany(mappedBy = "pet")
     private List<Schedule> schedules;
 
     public Pet() {

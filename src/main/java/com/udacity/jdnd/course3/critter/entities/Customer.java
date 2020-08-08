@@ -15,11 +15,21 @@ public class Customer {
     @Nationalized
     private String name;
     private String phoneNumber;
-    @Column(length = 500)
+    @Column(length = 2000)
     private String notes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Pet> pets;
+    @ManyToMany
+    private List<Schedule> schedule;
+
+    public List<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
+    }
 
     public void addPet(Pet pet) {
         pets.add(pet);

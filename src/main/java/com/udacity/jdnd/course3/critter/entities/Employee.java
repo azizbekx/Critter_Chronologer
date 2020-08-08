@@ -55,7 +55,6 @@ public class Employee {
     @ManyToMany(mappedBy = "employee")
     private List<Schedule> schedules;
 
-
     public Employee() {
     }
 

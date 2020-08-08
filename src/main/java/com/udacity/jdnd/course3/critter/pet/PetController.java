@@ -1,10 +1,16 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.entities.Customer;
 import com.udacity.jdnd.course3.critter.entities.Pet;
+import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
+import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.service.PetService;
+import com.udacity.jdnd.course3.critter.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,23 +20,36 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/pet")
 public class PetController {
-
+    @Autowired
     private PetService petService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = new Pet();
-        pet.setId(petDTO.getId());
-        pet.setName(petDTO.getName());
-        pet.setNotes(petDTO.getNotes());
-        pet.setBirthDate(petDTO.getBirthDate());
-        pet.setPetType(petDTO.getType());
-        return setPetDTO(petService.save(pet, petDTO.getOwnerId()));
+        Customer customer = userService.findById(petDTO.getOwnerId());
+
+        BeanUtils.copyProperties(petDTO, pet);
+        pet.setCustomer(customer);
+        Pet newPet = petService.save(pet);
+        if (customer.getPets() == null) {
+            customer.setPets(new ArrayList<>());
+        }
+        customer.getPets().add(newPet);
+        BeanUtils.copyProperties(newPet, petDTO);
+        return petDTO;
+    }
+
+    @PostMapping("/{ownerId}")
+    public PetDTO savePet(@RequestBody PetDTO petDTO, @PathVariable("ownerId") Long ownerId) {
+        petDTO.setOwnerId(ownerId);
+        return savePet(petDTO);
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        return setPetDTO(petService.getPetById(petId));
+        return setPetDTO(petService.findById(petId));
     }
 
     @GetMapping

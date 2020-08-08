@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.entities.Customer;
 import com.udacity.jdnd.course3.critter.entities.Pet;
+import com.udacity.jdnd.course3.critter.notFound.ObjectNotFoundException;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,13 @@ public class PetService {
     @Autowired
     private PetRepository petRepository;
 
-    public Pet save(Pet pet, Long ownerId) {
-        Customer customer = customerRepository.getOne(ownerId);
-        pet.setCustomer(customer);
+    public Pet save(Pet pet) {
         pet = petRepository.save(pet);
-        customer.addPet(pet);
-        customerRepository.save(customer);
         return pet;
     }
-
+    public Pet findById(long id) {
+        return petRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Pet not found in ID : " + id));
+    }
 
     /*
      * GET one Pet By Pet Id

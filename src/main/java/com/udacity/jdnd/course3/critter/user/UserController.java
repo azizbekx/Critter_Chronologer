@@ -5,6 +5,8 @@ import com.udacity.jdnd.course3.critter.entities.Employee;
 import com.udacity.jdnd.course3.critter.entities.Pet;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.UserService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
@@ -21,7 +23,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
     private UserService userService;
+    @Autowired
     private PetService petService;
 
     @PostMapping("/customer")
@@ -43,7 +47,8 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
-        return setCustomerDTO(userService.getCustomerByPet(petId));
+        Customer customer = petService.findById(petId).getCustomer();
+        return setCustomerDTO(customer);
     }
 
     @PostMapping("/employee")
@@ -88,6 +93,7 @@ public class UserController {
         customerDTO.setNotes(customer.getNotes());
         List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
         customerDTO.setPetIds(petIds);
+
         return customerDTO;
 
     }
