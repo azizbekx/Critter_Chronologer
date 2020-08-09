@@ -41,10 +41,10 @@ public class Employee {
     private String name;
 
     @ElementCollection
-    @Enumerated(EnumType.STRING)
     @JoinTable(name = "employee_skills", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "skill", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;
 
     @ElementCollection

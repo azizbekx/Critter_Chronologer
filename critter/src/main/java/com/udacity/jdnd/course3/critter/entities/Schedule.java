@@ -21,12 +21,14 @@ public class Schedule {
     @ManyToMany
     @JoinTable(name = "schedule_employee", joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
+
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Employee> employee;
 
     @ManyToMany
     @JoinTable(name = "schedule_pet", joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "pet_id"))
+
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Pet> pet;
 

@@ -54,10 +54,7 @@ public class UserController {
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        employee.setId(employeeDTO.getId());
-        employee.setName(employeeDTO.getName());
-        employee.setSkills((employeeDTO.getSkills()));
-        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        BeanUtils.copyProperties(employeeDTO,employee);
 
         return setEmployeeDTO(userService.saveEmployee(employee));
 

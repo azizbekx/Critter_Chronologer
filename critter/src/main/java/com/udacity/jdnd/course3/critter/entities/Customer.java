@@ -9,7 +9,7 @@ import java.util.List;
 //@Inheritance(strategy = InheritanceType.JOINED)
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Nationalized

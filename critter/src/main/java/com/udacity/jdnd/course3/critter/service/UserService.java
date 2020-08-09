@@ -45,12 +45,7 @@ public class UserService {
     public List<Customer> getAllCustomers(){
         return customerRepository.findAll();
     }
-    /**
-     * GET ALL CUSTOMERS
-     */
-    public Customer getCustomerByPet(long petId){
-        return petRepository.getOne(petId).getCustomer();
-    }
+
     /**
      * ADD EMPLOYEE
      */
@@ -77,6 +72,19 @@ public class UserService {
      * GET EMPLOYEE FOR SERVICE
      */
     public List<Employee> getEmployeesForService(Set<EmployeeSkill> skills,DayOfWeek dayOfWeek) {
-        return employeeRepository.findAllBySkillsInAndDaysAvailableContains(skills, dayOfWeek);
+        List<Employee> employees = employeeRepository.findAllBySkillsInAndDaysAvailableContains(skills, dayOfWeek);
+
+        List<Employee> employeeList = new ArrayList<>();
+
+        employees.forEach(thisEmployee -> {
+            if(thisEmployee.getSkills().containsAll(skills)){ employeeList.add(thisEmployee); }
+        });
+
+        return employeeList;
+
+    }
+
+    public List<Employee> findAllById(List<Long> employeeId){
+        return employeeRepository.findAllById(employeeId);
     }
 }
