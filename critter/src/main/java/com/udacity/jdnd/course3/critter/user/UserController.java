@@ -55,14 +55,17 @@ public class UserController {
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
-
+        employee.setSkills(employeeDTO.getSkills());
+        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
         return setEmployeeDTO(userService.saveEmployee(employee));
 
     }
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        return setEmployeeDTO(userService.getEmployeeById(employeeId));
+        Employee employee = userService.getEmployeeById(employeeId);
+
+        return setEmployeeDTO(employee);
     }
 
     @PutMapping("/employee/{employeeId}")
@@ -89,6 +92,7 @@ public class UserController {
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setNotes(customer.getNotes());
         List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
+
         customerDTO.setPetIds(petIds);
 
         return customerDTO;

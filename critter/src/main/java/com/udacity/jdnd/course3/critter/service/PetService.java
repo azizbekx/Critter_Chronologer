@@ -42,7 +42,7 @@ public class PetService {
     /*
      * GET Pets By Owner ID
      */
-    public List<Pet> getPetsByOwnerId(long customerId) {
-        return petRepository.findPetsByOwnerId(customerId);
-    }
+//    public List<Pet> getPetsByOwnerId(long customerId) {
+//        return petRepository.findByCustomerId(customerId);
+//    }
 }

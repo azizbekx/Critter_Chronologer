@@ -19,8 +19,6 @@ public class Pet {
     @Column(length = 64)
     private String name;
 
-    private Long ownerId;
-
     private LocalDate birthDate;
     @Column(length = 500)
     private String notes;
@@ -68,13 +66,6 @@ public class Pet {
         this.name = name;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
 
     public LocalDate getBirthDate() {
         return birthDate;

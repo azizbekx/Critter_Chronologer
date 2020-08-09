@@ -31,11 +31,13 @@ public class PetController {
         Customer customer = userService.findById(petDTO.getOwnerId());
 
         BeanUtils.copyProperties(petDTO, pet);
+        pet.setPetType(petDTO.getType());
         pet.setCustomer(customer);
         Pet newPet = petService.save(pet);
         if (customer.getPets() == null) {
             customer.setPets(new ArrayList<>());
         }
+
         customer.getPets().add(newPet);
         BeanUtils.copyProperties(newPet, petDTO);
         return petDTO;
@@ -71,12 +73,9 @@ public class PetController {
      */
     public PetDTO setPetDTO(Pet pet) {
         PetDTO petDTO = new PetDTO();
-        petDTO.setId(pet.getId());
-        petDTO.setName(pet.getName());
+        BeanUtils.copyProperties(pet, petDTO);
         petDTO.setType(pet.getPetType());
-        petDTO.setOwnerId(pet.getOwnerId());
-        petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setNotes(pet.getNotes());
+        petDTO.setOwnerId(pet.getCustomer().getId());
         return petDTO;
     }
 
