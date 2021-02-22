@@ -1,41 +1,41 @@
 package com.udacity.jdnd.course3.critter.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Nationalized
+    @Column(length = 50)
     private String name;
     private String phoneNumber;
-    @Column(length = 2000)
     private String notes;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner",
+            cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Pet> pets;
-    @ManyToMany
-    private List<Schedule> schedule;
 
-    public List<Schedule> getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(List<Schedule> schedule) {
-        this.schedule = schedule;
-    }
-
-    public void addPet(Pet pet) {
-        pets.add(pet);
-    }
+    @ManyToMany(mappedBy = "customers")
+    private List<Schedule> schedules;
 
     public Customer() {
+    }
+
+    public Customer(Long id, String name, String phoneNumber, String notes, List<Pet> pets) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.notes = notes;
+        this.pets = pets;
     }
 
     public Long getId() {
@@ -78,5 +78,11 @@ public class Customer {
         this.pets = pets;
     }
 
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
 
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
 }

@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.entities;
 
-import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.entities.user.EmployeeSkill;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -9,42 +9,43 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Schedule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate date;
 
-    @ManyToMany
-    @JoinTable(name = "schedule_employee", joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "schudele_employee",
+            joinColumns = {@JoinColumn(name = "schedule_id")},
+            inverseJoinColumns = {@JoinColumn(name = "employee_id")}
+    )
+    private List<Employee> employees;
 
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<Employee> employee;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "schudele_customer",
+            joinColumns = {@JoinColumn(name = "schedule_id")},
+            inverseJoinColumns = {@JoinColumn(name = "customer_id")}
+    )
+    private List<Customer> customers;
 
-    @ManyToMany
-    @JoinTable(name = "schedule_pet", joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "pet_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "schedule_pet",
+            joinColumns = {@JoinColumn(name = "schedule_id")},
+            inverseJoinColumns = {@JoinColumn(name = "pet_id")}
+    )
+    private List<Pet> pets;
 
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<Pet> pet;
 
 
     @ElementCollection(targetClass = EmployeeSkill.class)
-    @JoinTable(name = "schedule_activity", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "activity", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private Set<EmployeeSkill> activities;
-
-    @ManyToMany
-    private List<Customer> customer;
-
-    public Schedule() {
-    }
+    private Set<EmployeeSkill> employeeSkills;
 
     public Long getId() {
         return id;
@@ -54,20 +55,28 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<Employee> getEmployee() {
-        return employee;
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setEmployee(List<Employee> employee) {
-        this.employee = employee;
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 
-    public List<Pet> getPet() {
-        return pet;
+    public List<Customer> getCustomers() {
+        return customers;
     }
 
-    public void setPet(List<Pet> pet) {
-        this.pet = pet;
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
     }
 
     public LocalDate getDate() {
@@ -78,19 +87,11 @@ public class Schedule {
         this.date = date;
     }
 
-    public Set<EmployeeSkill> getActivities() {
-        return activities;
+    public Set<EmployeeSkill> getEmployeeSkills() {
+        return employeeSkills;
     }
 
-    public void setActivities(Set<EmployeeSkill> activities) {
-        this.activities = activities;
-    }
-
-    public List<Customer> getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(List<Customer> customer) {
-        this.customer = customer;
+    public void setEmployeeSkills(Set<EmployeeSkill> employeeSkills) {
+        this.employeeSkills = employeeSkills;
     }
 }
